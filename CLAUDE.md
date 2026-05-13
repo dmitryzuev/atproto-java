@@ -182,8 +182,8 @@ java_export(
 
 Publishing command:
 ```bash
-bazel run //src/java/com/atproto/xrpc:xrpc_export.publish -- \
-  --maven_repo=file://${HOME}/.m2/repository
+bazel run --define "maven_repo=file://$HOME/.m2/repository" \
+  //src/java/com/atproto/xrpc:xrpc_export.publish
 ```
 
 ---

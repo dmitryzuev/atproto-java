@@ -52,13 +52,11 @@ jobs:
           repository-cache: true
 
       - name: Publish to local Maven repository
-        run: |
-          bash maven/publish_all.sh \
-            --maven_repo=file:///tmp/maven-repo
+        run: bash maven/publish_all.sh "file://$HOME/.m2/repository"
 
       - name: Upload Maven artifacts
         uses: actions/upload-artifact@v4
         with:
           name: maven-packages
-          path: /tmp/maven-repo/
+          path: ~/.m2/repository/com/atproto/
           if-no-files-found: error
