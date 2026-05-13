@@ -1,0 +1,32 @@
+java_library(
+    name = "xrpc",
+    srcs = glob(["src/main/java/**/*.java"]),
+    javacopts = ["--release", "21"],
+    deps = [
+        "//lex-data:lex_data",
+        "//lex-json:lex_json",
+        "//lexicon:lexicon",
+        "@maven//:com_squareup_okhttp3_okhttp",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:com_fasterxml_jackson_core_jackson_core",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+java_test(
+    name = "xrpc_tests",
+    srcs = glob(["src/test/java/**/*.java"]),
+    javacopts = ["--release", "21"],
+    test_class = "io.atproto.xrpc.AllTests",
+    deps = [
+        ":xrpc",
+        "//lex-data:lex_data",
+        "//lex-json:lex_json",
+        "//lexicon:lexicon",
+        "@maven//:com_squareup_okhttp3_okhttp",
+        "@maven//:com_squareup_okhttp3_mockwebserver",
+        "@maven//:org_junit_jupiter_junit_jupiter_api",
+        "@maven//:org_junit_jupiter_junit_jupiter_engine",
+        "@maven//:org_assertj_assertj_core",
+    ],
+)

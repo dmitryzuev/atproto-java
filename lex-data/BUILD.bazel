@@ -1,0 +1,19 @@
+java_library(
+    name = "lex_data",
+    srcs = glob(["src/main/java/**/*.java"]),
+    javacopts = ["--release", "21"],
+    visibility = ["//visibility:public"],
+)
+
+java_test(
+    name = "lex_data_tests",
+    srcs = glob(["src/test/java/**/*.java"]),
+    javacopts = ["--release", "21"],
+    test_class = "io.atproto.lex.data.AllTests",
+    deps = [
+        ":lex_data",
+        "@maven//:org_junit_jupiter_junit_jupiter_api",
+        "@maven//:org_junit_jupiter_junit_jupiter_engine",
+        "@maven//:org_assertj_assertj_core",
+    ],
+)
