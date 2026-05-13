@@ -1,1 +1,31 @@
-# Root BUILD — nothing to build here; modules are sub-packages.
+java_library(
+    name = "atproto_sdk",
+    srcs = glob(["src/java/**/*.java"]),
+    javacopts = ["--release", "21"],
+    deps = [
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:com_fasterxml_jackson_core_jackson_core",
+        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+        "@maven//:com_squareup_okhttp3_okhttp",
+        "@maven//:com_upokecenter_cbor",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+java_test(
+    name = "atproto_sdk_tests",
+    srcs = glob(["src/test/java/**/*.java"]),
+    javacopts = ["--release", "21"],
+    resources = glob(["src/test/resources/**"]),
+    test_class = "com.atproto.AllTests",
+    deps = [
+        ":atproto_sdk",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:com_squareup_okhttp3_okhttp",
+        "@maven//:com_squareup_okhttp3_mockwebserver",
+        "@maven//:org_junit_jupiter_junit_jupiter_api",
+        "@maven//:org_junit_jupiter_junit_jupiter_engine",
+        "@maven//:org_junit_platform_junit_platform_launcher",
+        "@maven//:org_assertj_assertj_core",
+    ],
+)
