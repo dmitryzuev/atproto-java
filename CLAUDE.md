@@ -130,3 +130,75 @@ CID links in DAG-CBOR are encoded as **CBOR tag 42** wrapping a byte string of `
 | `com.fasterxml.jackson.core:jackson-databind` | `@maven//:com_fasterxml_jackson_core_jackson_databind` |
 | `com.squareup.okhttp3:mockwebserver` | `@maven//:com_squareup_okhttp3_mockwebserver` |
 | `org.junit.platform:junit-platform-launcher` | `@maven//:org_junit_platform_junit_platform_launcher` |
+
+---
+
+## Maven publishing with `java_export`
+
+Each library package has **two targets**: a `java_library` for internal deps/tests, and a `java_export` for publishing. They live side by side in the same `BUILD.bazel`.
+
+```python
+load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_jvm_external//:defs.bzl", "java_export")
+
+java_library(
+    name = "lex_data",
+    srcs = glob(["**/*.java"]),
+    javacopts = ["--release", "21"],
+    visibility = ["//visibility:public"],
+)
+
+java_export(
+    name = "lex_data_export",
+    tags = ["no-javadocs"],
+    maven_coordinates = "com.atproto:lex-data:0.1.0",
+    pom_template = "//maven:pom_template.xml",
+    exports = [":lex_data"],
+    visibility = ["//visibility:public"],
+)
+```
+
+Key rules:
+- **`exports`, not `deps`**: `java_export` without `srcs` must use `exports` to reference the compiled library. Using `deps` instead causes "deps not allowed without srcs".
+- **`tags = ["no-javadocs"]`**: Required on all `java_export` targets. Java 21 sealed types cause the standard javadoc tool to fail; this tag skips javadoc JAR generation.
+- **`pom_template`**: Declared in `maven/BUILD.bazel` via `exports_files(["pom_template.xml"])`. The `{dependencies}` placeholder is auto-populated by traversing the dep graph for targets tagged with `maven_coordinates`.
+- **Inter-module exports**: For modules that depend on other modules, include the peer `_export` targets (not the `java_library` targets) in `exports` so the POM lists the correct Maven coordinates as dependencies:
+
+```python
+java_export(
+    name = "xrpc_export",
+    tags = ["no-javadocs"],
+    maven_coordinates = "com.atproto:xrpc:0.1.0",
+    pom_template = "//maven:pom_template.xml",
+    exports = [
+        ":xrpc",
+        "//src/java/com/atproto/lex/data:lex_data_export",
+        "//src/java/com/atproto/lex/json:lex_json_export",
+        "//src/java/com/atproto/lexicon:lexicon_export",
+    ],
+    visibility = ["//visibility:public"],
+)
+```
+
+Publishing command:
+```bash
+bazel run //src/java/com/atproto/xrpc:xrpc_export.publish -- \
+  --maven_repo=file://${HOME}/.m2/repository
+```
+
+---
+
+## README structure
+
+The `README.md` mirrors the structure and depth of the upstream TypeScript `@atproto/lex` README. When updating or extending the README, keep the same section order:
+
+1. Preview callout → tagline → feature bullets → three code examples
+2. Linked TOC
+3. Quick Start (numbered steps)
+4. Data Model (Types, JSON Encoding, CBOR Encoding)
+5. Schema Validation (Loading Schemas, Validating Records, String Format Validators)
+6. Making XRPC Requests
+7. Client API (Creating, Dynamic Headers, Core Methods, Async, Error Handling, Custom Transport)
+8. Utilities (CID Utilities, Blob References, Deep Equality)
+9. Build (Bazel targets, Publishing, Package Structure)
+10. License
