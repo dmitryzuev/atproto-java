@@ -1,1 +1,33 @@
 # Starlark utilities — exported via .bzl files in this package.
+
+load("@rules_java//java:defs.bzl", "java_binary")
+load("//tools:format.bzl", "gjf_runner")
+
+java_binary(
+    name = "google_java_format",
+    main_class = "com.google.googlejavaformat.java.Main",
+    jvm_flags = [
+        "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+        "--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+        "--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+        "--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
+        "--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+    ],
+    runtime_deps = ["@maven//:com_google_googlejavaformat_google_java_format"],
+    visibility = ["//visibility:public"],
+)
+
+# bazel run //tools:format           — reformat all Java files under src/ in place
+# bazel run //tools:format -- <file> — reformat specific files
+gjf_runner(
+    name = "format",
+    formatter = ":google_java_format",
+)
+
+# bazel run //tools:format_check           — check all Java files under src/
+# bazel run //tools:format_check -- <file> — check specific files
+gjf_runner(
+    name = "format_check",
+    formatter = ":google_java_format",
+    check_mode = True,
+)
