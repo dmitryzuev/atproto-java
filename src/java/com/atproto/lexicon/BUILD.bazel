@@ -1,4 +1,5 @@
 load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_jvm_external//:defs.bzl", "java_export")
 
 java_library(
     name = "lexicon",
@@ -12,6 +13,19 @@ java_library(
         "@maven//:com_fasterxml_jackson_core_jackson_databind",
         "@maven//:com_fasterxml_jackson_core_jackson_core",
         "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+java_export(
+    name = "lexicon_export",
+    tags = ["no-javadocs"],
+    maven_coordinates = "com.atproto:lexicon:0.1.0",
+    pom_template = "//maven:pom_template.xml",
+    exports = [
+        ":lexicon",
+        "//src/java/com/atproto/lex/data:lex_data_export",
+        "//src/java/com/atproto/lex/json:lex_json_export",
     ],
     visibility = ["//visibility:public"],
 )

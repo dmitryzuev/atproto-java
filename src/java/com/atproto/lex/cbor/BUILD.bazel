@@ -1,4 +1,5 @@
 load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_jvm_external//:defs.bzl", "java_export")
 
 java_library(
     name = "lex_cbor",
@@ -7,6 +8,18 @@ java_library(
     deps = [
         "//src/java/com/atproto/lex/data:lex_data",
         "@maven//:com_upokecenter_cbor",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+java_export(
+    name = "lex_cbor_export",
+    tags = ["no-javadocs"],
+    maven_coordinates = "com.atproto:lex-cbor:0.1.0",
+    pom_template = "//maven:pom_template.xml",
+    exports = [
+        ":lex_cbor",
+        "//src/java/com/atproto/lex/data:lex_data_export",
     ],
     visibility = ["//visibility:public"],
 )

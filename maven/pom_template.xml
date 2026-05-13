@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>{groupId}</groupId>
+    <artifactId>{artifactId}</artifactId>
+    <version>{version}</version>
+    <packaging>jar</packaging>
+
+    <name>atproto-sdk — {artifactId}</name>
+    <description>Java 21 AT Protocol SDK — {artifactId} module</description>
+    <url>https://github.com/your-org/atproto-sdk</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Your Name</name>
+            <email>you@example.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/your-org/atproto-sdk.git</connection>
+        <developerConnection>scm:git:ssh://github.com/your-org/atproto-sdk.git</developerConnection>
+        <url>https://github.com/your-org/atproto-sdk/tree/main</url>
+    </scm>
+
+    <dependencies>
+{dependencies}
+    </dependencies>
+</project>

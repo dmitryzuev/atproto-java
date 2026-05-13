@@ -1,0 +1,18 @@
+exports_files(["pom_template.xml"])
+
+# Publish targets — run with --maven_repo, --maven_user, --maven_password:
+#
+#   bazel run //src/java/com/atproto/lex/data:lex_data_export.publish -- \
+#       --maven_repo=https://oss.sonatype.org/service/local/staging/deploy/maven2 \
+#       --maven_user=$SONATYPE_USER --maven_password=$SONATYPE_PASSWORD
+#
+# Or for a local file repo (useful for testing):
+#
+#   bazel run //src/java/com/atproto/lex/data:lex_data_export.publish -- \
+#       --maven_repo=file:///tmp/maven-repo
+#
+# Repeat for each module:
+#   //src/java/com/atproto/lex/json:lex_json_export.publish
+#   //src/java/com/atproto/lex/cbor:lex_cbor_export.publish
+#   //src/java/com/atproto/lexicon:lexicon_export.publish
+#   //src/java/com/atproto/xrpc:xrpc_export.publish
