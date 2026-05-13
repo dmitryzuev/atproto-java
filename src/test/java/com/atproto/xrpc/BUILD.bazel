@@ -1,0 +1,17 @@
+load("//tools:junit5.bzl", "junit5_test")
+
+junit5_test(
+    name = "XrpcClientTest",
+    srcs = ["XrpcClientTest.java"],
+    test_class = "com.atproto.xrpc.XrpcClientTest",
+    deps = [
+        "//src/java/com/atproto/lex/data:lex_data",
+        "//src/java/com/atproto/lex/json:lex_json",
+        "//src/java/com/atproto/lexicon:lexicon",
+        "//src/java/com/atproto/xrpc:xrpc",
+        "@maven//:com_squareup_okhttp3_okhttp",
+        "@maven//:com_squareup_okhttp3_mockwebserver",
+        "@maven//:org_junit_jupiter_junit_jupiter_api",
+        "@maven//:org_assertj_assertj_core",
+    ],
+)

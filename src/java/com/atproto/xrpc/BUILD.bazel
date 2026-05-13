@@ -1,0 +1,18 @@
+load("@rules_java//java:defs.bzl", "java_library")
+
+java_library(
+    name = "xrpc",
+    # Includes error/ and internal/ subdirectories — kept in this Bazel package
+    # to avoid a circular dependency between XrpcClient and its internal helpers.
+    srcs = glob(["**/*.java"]),
+    javacopts = ["--release", "21"],
+    deps = [
+        "//src/java/com/atproto/lex/data:lex_data",
+        "//src/java/com/atproto/lex/json:lex_json",
+        "//src/java/com/atproto/lexicon:lexicon",
+        "@maven//:com_squareup_okhttp3_okhttp",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:com_fasterxml_jackson_core_jackson_core",
+    ],
+    visibility = ["//visibility:public"],
+)

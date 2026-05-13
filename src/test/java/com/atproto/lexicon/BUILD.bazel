@@ -1,0 +1,26 @@
+load("//tools:junit5.bzl", "junit5_test")
+
+COMMON_DEPS = [
+    "//src/java/com/atproto/lex/data:lex_data",
+    "//src/java/com/atproto/lex/json:lex_json",
+    "//src/java/com/atproto/lexicon:lexicon",
+    "@maven//:com_fasterxml_jackson_core_jackson_databind",
+    "@maven//:org_junit_jupiter_junit_jupiter_api",
+    "@maven//:org_assertj_assertj_core",
+]
+
+junit5_test(
+    name = "LexiconDocDeserializerTest",
+    srcs = ["LexiconDocDeserializerTest.java"],
+    test_class = "com.atproto.lexicon.LexiconDocDeserializerTest",
+    resources = ["//src/test/resources:testdata"],
+    deps = COMMON_DEPS,
+)
+
+junit5_test(
+    name = "LexiconsTest",
+    srcs = ["LexiconsTest.java"],
+    test_class = "com.atproto.lexicon.LexiconsTest",
+    resources = ["//src/test/resources:testdata"],
+    deps = COMMON_DEPS,
+)

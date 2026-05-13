@@ -1,6 +1,18 @@
 package com.atproto.lexicon.validation;
 
-import com.atproto.lex.data.*;
+import com.atproto.lex.data.LexBlobRef;
+import com.atproto.lex.data.LexError;
+import com.atproto.lex.data.LexMap;
+import com.atproto.lex.data.LexNull;
+import com.atproto.lex.data.LexValue;
+import com.atproto.lex.data.TypedBlobRef;
+// Explicit imports resolve ambiguity with same-named schema types:
+import com.atproto.lex.data.LexArray;
+import com.atproto.lex.data.LexBoolean;
+import com.atproto.lex.data.LexBytes;
+import com.atproto.lex.data.LexCidLink;
+import com.atproto.lex.data.LexInteger;
+import com.atproto.lex.data.LexString;
 import com.atproto.lexicon.Lexicons;
 import com.atproto.lexicon.schema.*;
 
@@ -56,7 +68,7 @@ public final class LexiconValidator {
 
     // ---- Internal dispatch ----
 
-    ValidationResult validateDef(String lexUri, LexUserType def, LexValue value) {
+    public ValidationResult validateDef(String lexUri, LexUserType def, LexValue value) {
         return switch (def) {
             case LexRecord rec         -> validateObject(lexUri, rec.record(), asMap(value, lexUri), false);
             case LexObject obj         -> validateObject(lexUri, obj, asMap(value, lexUri), false);
@@ -66,7 +78,7 @@ public final class LexiconValidator {
             case com.atproto.lexicon.schema.LexInteger i -> validateIntegerDef(lexUri, i, value);
             case com.atproto.lexicon.schema.LexString s  -> validateStringDef(lexUri, s, value);
             case com.atproto.lexicon.schema.LexBytes by  -> validateBytesDef(lexUri, by, value);
-            case LexCidLink ignored    -> validateCidLink(lexUri, value);
+            case com.atproto.lexicon.schema.LexCidLink ignored -> validateCidLink(lexUri, value);
             case LexRef ref            -> validateRef(lexUri, ref, value);
             case LexRefUnion union     -> validateUnion(lexUri, union, value);
             case LexToken ignored      -> ValidationResult.success(value);

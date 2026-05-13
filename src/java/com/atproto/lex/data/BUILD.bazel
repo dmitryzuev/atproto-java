@@ -1,0 +1,8 @@
+load("@rules_java//java:defs.bzl", "java_library")
+
+java_library(
+    name = "lex_data",
+    srcs = glob(["**/*.java"]),
+    javacopts = ["--release", "21"],
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,14 @@
+load("@rules_java//java:defs.bzl", "java_library")
+
+java_library(
+    name = "lex_json",
+    srcs = glob(["**/*.java"]),
+    javacopts = ["--release", "21"],
+    deps = [
+        "//src/java/com/atproto/lex/data:lex_data",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:com_fasterxml_jackson_core_jackson_core",
+        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+    ],
+    visibility = ["//visibility:public"],
+)

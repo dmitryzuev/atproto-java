@@ -1,0 +1,22 @@
+load("//tools:junit5.bzl", "junit5_test")
+
+COMMON_DEPS = [
+    "//src/java/com/atproto/lex/data:lex_data",
+    "//src/java/com/atproto/lex/cbor:lex_cbor",
+    "@maven//:org_junit_jupiter_junit_jupiter_api",
+    "@maven//:org_assertj_assertj_core",
+]
+
+junit5_test(
+    name = "CborCodecTest",
+    srcs = ["CborCodecTest.java"],
+    test_class = "com.atproto.lex.cbor.CborCodecTest",
+    deps = COMMON_DEPS,
+)
+
+junit5_test(
+    name = "CidUtilsTest",
+    srcs = ["CidUtilsTest.java"],
+    test_class = "com.atproto.lex.cbor.CidUtilsTest",
+    deps = COMMON_DEPS,
+)

@@ -1,0 +1,17 @@
+load("@rules_java//java:defs.bzl", "java_library")
+
+java_library(
+    name = "lexicon",
+    # Includes schema/ and validation/ subdirectories — kept in this Bazel package
+    # to avoid a circular dependency between Lexicons and LexiconValidator.
+    srcs = glob(["**/*.java"]),
+    javacopts = ["--release", "21"],
+    deps = [
+        "//src/java/com/atproto/lex/data:lex_data",
+        "//src/java/com/atproto/lex/json:lex_json",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:com_fasterxml_jackson_core_jackson_core",
+        "@maven//:com_fasterxml_jackson_core_jackson_annotations",
+    ],
+    visibility = ["//visibility:public"],
+)

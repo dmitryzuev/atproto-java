@@ -18,6 +18,12 @@ class LexJsonConverterTest {
         converter = new LexJsonConverter();
     }
 
+    private static Cid sampleCid() {
+        byte[] digest = new byte[32];
+        for (int i = 0; i < digest.length; i++) digest[i] = (byte) (i + 1);
+        return new Cid(1, Cid.CODEC_DAG_CBOR, new Multihash(Cid.MH_SHA2_256, digest));
+    }
+
     @Test
     void roundTripNull() {
         assertThat(converter.jsonToLex(converter.lexToJson(LexNull.INSTANCE))).isEqualTo(LexNull.INSTANCE);
@@ -53,7 +59,7 @@ class LexJsonConverterTest {
 
     @Test
     void encodesLexCidLinkAs$link() {
-        Cid cid = Cid.parse("bafyreih7a2zjxm4vq4e6pmgbpnfhz7ywkf7hmqzz4z5ssvvoyv5d6yqiq");
+        Cid cid = sampleCid();
         LexCidLink v = new LexCidLink(cid);
         String json = converter.lexToJsonString(v);
         assertThat(json).contains("$link");
@@ -64,7 +70,7 @@ class LexJsonConverterTest {
 
     @Test
     void encodesTypedBlobRef() {
-        Cid cid = Cid.parse("bafyreih7a2zjxm4vq4e6pmgbpnfhz7ywkf7hmqzz4z5ssvvoyv5d6yqiq");
+        Cid cid = sampleCid();
         LexBlobRef v = new LexBlobRef(new TypedBlobRef(cid, "image/png", 1024L));
         String json = converter.lexToJsonString(v);
         assertThat(json).contains("\"$type\":\"blob\"");

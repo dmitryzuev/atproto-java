@@ -1,0 +1,21 @@
+load("//tools:junit5.bzl", "junit5_test")
+
+COMMON_DEPS = [
+    "//src/java/com/atproto/lex/data:lex_data",
+    "@maven//:org_junit_jupiter_junit_jupiter_api",
+    "@maven//:org_assertj_assertj_core",
+]
+
+junit5_test(
+    name = "CidTest",
+    srcs = ["CidTest.java"],
+    test_class = "com.atproto.lex.data.CidTest",
+    deps = COMMON_DEPS,
+)
+
+junit5_test(
+    name = "LexValueDeepEqualsTest",
+    srcs = ["LexValueDeepEqualsTest.java"],
+    test_class = "com.atproto.lex.data.LexValueDeepEqualsTest",
+    deps = COMMON_DEPS,
+)

@@ -19,6 +19,12 @@ class CborCodecTest {
         codec = new CborCodec();
     }
 
+    private static Cid sampleCid() {
+        byte[] digest = new byte[32];
+        for (int i = 0; i < digest.length; i++) digest[i] = (byte) (i + 1);
+        return new Cid(1, Cid.CODEC_DAG_CBOR, new Multihash(Cid.MH_SHA2_256, digest));
+    }
+
     @Test
     void roundTripNull() {
         assertThat(codec.decode(codec.encode(LexNull.INSTANCE))).isEqualTo(LexNull.INSTANCE);
@@ -52,7 +58,7 @@ class CborCodecTest {
 
     @Test
     void roundTripCidLink() {
-        Cid cid = Cid.parse("bafyreih7a2zjxm4vq4e6pmgbpnfhz7ywkf7hmqzz4z5ssvvoyv5d6yqiq");
+        Cid cid = sampleCid();
         LexCidLink v = new LexCidLink(cid);
         LexValue decoded = codec.decode(codec.encode(v));
         assertThat(decoded).isInstanceOf(LexCidLink.class);
@@ -77,7 +83,7 @@ class CborCodecTest {
 
     @Test
     void roundTripTypedBlobRef() {
-        Cid cid = Cid.parse("bafyreih7a2zjxm4vq4e6pmgbpnfhz7ywkf7hmqzz4z5ssvvoyv5d6yqiq");
+        Cid cid = sampleCid();
         LexBlobRef v = new LexBlobRef(new TypedBlobRef(cid, "image/png", 512L));
         LexValue decoded = codec.decode(codec.encode(v));
         assertThat(decoded).isInstanceOf(LexBlobRef.class);

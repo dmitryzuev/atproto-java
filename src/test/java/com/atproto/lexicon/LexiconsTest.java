@@ -1,6 +1,12 @@
 package com.atproto.lexicon;
 
 import com.atproto.lex.data.*;
+import com.atproto.lex.data.LexArray;
+import com.atproto.lex.data.LexBoolean;
+import com.atproto.lex.data.LexBytes;
+import com.atproto.lex.data.LexCidLink;
+import com.atproto.lex.data.LexInteger;
+import com.atproto.lex.data.LexString;
 import com.atproto.lexicon.schema.*;
 import com.atproto.lexicon.validation.ValidationError;
 import org.junit.jupiter.api.BeforeEach;

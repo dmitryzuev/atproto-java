@@ -1,0 +1,14 @@
+load("//tools:junit5.bzl", "junit5_test")
+
+junit5_test(
+    name = "LexJsonConverterTest",
+    srcs = ["LexJsonConverterTest.java"],
+    test_class = "com.atproto.lex.json.LexJsonConverterTest",
+    deps = [
+        "//src/java/com/atproto/lex/data:lex_data",
+        "//src/java/com/atproto/lex/json:lex_json",
+        "@maven//:com_fasterxml_jackson_core_jackson_databind",
+        "@maven//:org_junit_jupiter_junit_jupiter_api",
+        "@maven//:org_assertj_assertj_core",
+    ],
+)

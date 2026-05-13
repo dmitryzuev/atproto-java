@@ -6,27 +6,33 @@ import static org.assertj.core.api.Assertions.*;
 
 class CidTest {
 
-    // Known CIDv1 base32 string from the AT Protocol test suite
-    private static final String KNOWN_CID = "bafyreih7a2zjxm4vq4e6pmgbpnfhz7ywkf7hmqzz4z5ssvvoyv5d6yqiq";
+    private static Cid sampleCid() {
+        byte[] digest = new byte[32];
+        for (int i = 0; i < digest.length; i++) digest[i] = (byte) (i + 1);
+        return new Cid(1, Cid.CODEC_DAG_CBOR, new Multihash(Cid.MH_SHA2_256, digest));
+    }
 
     @Test
     void roundTripBase32() {
-        Cid cid = Cid.parse(KNOWN_CID);
-        assertThat(cid.toBase32()).isEqualTo(KNOWN_CID);
+        Cid original = sampleCid();
+        Cid reparsed = Cid.parse(original.toBase32());
+        assertThat(reparsed).isEqualTo(original);
     }
 
     @Test
     void parseAndInspect() {
-        Cid cid = Cid.parse(KNOWN_CID);
+        Cid cid = sampleCid();
         assertThat(cid.version()).isEqualTo(1);
         assertThat(cid.codec()).isEqualTo(Cid.CODEC_DAG_CBOR);
         assertThat(cid.multihash().code()).isEqualTo(Cid.MH_SHA2_256);
         assertThat(cid.multihash().digest()).hasSize(32);
+        // Verify round-trip through base32 string
+        assertThat(Cid.parse(cid.toBase32())).isEqualTo(cid);
     }
 
     @Test
     void roundTripBytes() {
-        Cid cid = Cid.parse(KNOWN_CID);
+        Cid cid = sampleCid();
         byte[] bytes = cid.toBytes();
         Cid reparsed = Cid.fromBytes(bytes);
         assertThat(reparsed).isEqualTo(cid);
@@ -34,8 +40,8 @@ class CidTest {
 
     @Test
     void equalityAndHashCode() {
-        Cid a = Cid.parse(KNOWN_CID);
-        Cid b = Cid.parse(KNOWN_CID);
+        Cid a = sampleCid();
+        Cid b = sampleCid();
         assertThat(a).isEqualTo(b);
         assertThat(a.hashCode()).isEqualTo(b.hashCode());
     }

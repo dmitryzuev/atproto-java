@@ -34,9 +34,9 @@ public final class CborCodec {
         return switch (value) {
             case LexNull ignored    -> CBORObject.Null;
             case LexBoolean b       -> b.value() ? CBORObject.True : CBORObject.False;
-            case LexInteger i       -> CBORObject.FromInt64(i.value());
-            case LexString s        -> CBORObject.FromString(s.value());
-            case LexBytes b         -> CBORObject.FromByteArray(b.value());
+            case LexInteger i       -> CBORObject.FromObject(i.value());
+            case LexString s        -> CBORObject.FromObject(s.value());
+            case LexBytes b         -> CBORObject.FromObject(b.value());
             case LexCidLink c       -> encodeCidLink(c.cid());
             case LexBlobRef br      -> encodeBlobRef(br);
             case LexArray arr       -> encodeArray(arr);
@@ -50,21 +50,21 @@ public final class CborCodec {
         byte[] payload = new byte[cidBytes.length + 1];
         payload[0] = 0x00; // multibase identity prefix
         System.arraycopy(cidBytes, 0, payload, 1, cidBytes.length);
-        return CBORObject.FromCBORObjectAndTag(CBORObject.FromByteArray(payload), TAG_CID);
+        return CBORObject.FromObjectAndTag(CBORObject.FromObject(payload), TAG_CID);
     }
 
     private CBORObject encodeBlobRef(LexBlobRef blobRef) {
         CBORObject map = CBORObject.NewOrderedMap();
         switch (blobRef.ref()) {
             case TypedBlobRef t -> {
-                map.set("$type", CBORObject.FromString("blob"));
+                map.set("$type", CBORObject.FromObject("blob"));
                 map.set("ref", encodeCidLink(t.ref()));
-                map.set("mimeType", CBORObject.FromString(t.mimeType()));
-                map.set("size", CBORObject.FromInt64(t.size()));
+                map.set("mimeType", CBORObject.FromObject(t.mimeType()));
+                map.set("size", CBORObject.FromObject(t.size()));
             }
             case LegacyBlobRef l -> {
-                map.set("cid", CBORObject.FromString(l.cidString()));
-                map.set("mimeType", CBORObject.FromString(l.mimeType()));
+                map.set("cid", CBORObject.FromObject(l.cidString()));
+                map.set("mimeType", CBORObject.FromObject(l.mimeType()));
             }
         }
         return map;
@@ -166,8 +166,8 @@ public final class CborCodec {
      * DAG-CBOR canonical map key order: sort by CBOR-encoded key length first, then lexicographically.
      */
     static int dagCborKeyComparator(String a, String b) {
-        byte[] ba = CBORObject.FromString(a).EncodeToBytes();
-        byte[] bb = CBORObject.FromString(b).EncodeToBytes();
+        byte[] ba = CBORObject.FromObject(a).EncodeToBytes();
+        byte[] bb = CBORObject.FromObject(b).EncodeToBytes();
         if (ba.length != bb.length) return Integer.compare(ba.length, bb.length);
         for (int i = 0; i < ba.length; i++) {
             int diff = Byte.toUnsignedInt(ba[i]) - Byte.toUnsignedInt(bb[i]);
